@@ -861,7 +861,7 @@ class THzAnalyser(object):
                 """
                 def ResWrap(f, paras, c=False):
                         def Residual(par, x, data=None):
-                                model = mod.SwitchTemp(f, par, x, paras)
+                                model = mod.Switch(f, par, x, paras)
                                 if not c:
                                         model = np.real(model)
                                 if data is None:
@@ -877,7 +877,7 @@ class THzAnalyser(object):
                         return Residual
                 yLabel_Map = {'Conductivity': '$\sigma$',
                               'Transmission': 'T'}
-                yLabel = yLabel_Map[fitQty]
+               yLabel = yLabel_Map[fitQty]
                 if c:
                         err = err[0] + 1j * err[1]
 
@@ -916,14 +916,14 @@ class THzAnalyser(object):
                                 wn.warn('Warning:: Model undefined or' +
                                         ' not understood, Drude model ' +
                                         'chose as default', RuntimeWarning)
-                guessed = mod.SwitchTemp(model, par, x, paras)
+                guessed = mod.Switch(model, par, x, paras)
                 if np.any(err):
                         data = np.append(data, err, axis=0)
                         data = np.reshape(data, (2, len(y)))
                 res = ResWrap(model, paras, c)
                 out = fit.minimize(res, par, args=(x,), kws={'data': data},
                                    nan_policy='omit')
-                fitted = mod.SwitchTemp(model, out.params, x, paras)
+                fitted = mod.Switch(model, out.params, x, paras)
 
                 if plot:
                         print(fit.fit_report(out))
